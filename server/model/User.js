@@ -2,7 +2,8 @@ var mongoose = require('mongoose')
 var userSchema = mongoose.Schema({
     email:{
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
     name:{
         type: String,
@@ -23,6 +24,10 @@ var userSchema = mongoose.Schema({
     },
     avatar:{
         type: String,
+        required: true
+    },
+    role:{
+        type:String,
         required: true
     }
 })

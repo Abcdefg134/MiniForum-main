@@ -15,7 +15,7 @@ export default function SignupScreen() {
             age:'0',
             name:"User",
             role: "user",
-            
+            avatar: 'uploads/Untitled.png',
         }
         if(password === rePassword && password !==""){
            await signup(body).then(res=>{
