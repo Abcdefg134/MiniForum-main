@@ -1,9 +1,10 @@
 import React, { useEffect, useState,Suspense, lazy } from 'react'
-
+import './index.css'
 import {
     BrowserRouter as Router,
     Route, useHistory, useParams
 } from "react-router-dom";
+import { Switch } from 'react-router';
 import jwtDecode from 'jwt-decode';
 import Main from './Main'
 import LoginScreen from './LoginScreen'
@@ -41,10 +42,10 @@ export default function Navigation() {
     return (
         <div>
             <Router>
-                
+                <Switch>
                     <Route exact path="/signup" component={SignupScreen} />
                     {!token ?
-                        <LoginScreen setToken={loginSucess} /> :
+                        <LoginScreen  exact setToken={loginSucess} /> :
                         (<><Suspense fallback={<div>Loading...</div>}>
                             {crurrentUser.role ==='admin'?(<Route exact path='/admin' component={AdminPage} />):null}
                             <Route exact path="/" component={Main} />
@@ -52,7 +53,7 @@ export default function Navigation() {
                             <Route exact path="/post/:id" component={Post} />
                             <Route exact path='/editUSer' component={EditUserProfile} />
                             </Suspense></>)}
-                           
+                            </Switch>
             </Router>
         </div>
     )
