@@ -12,7 +12,6 @@ export default function Main() {
         history.push('/userprofile')
     }
     const [postData, setPostData] = useState([])
-    const [url, setUrl] = useState('http://localhost:8797/post')
     const getUserReducer = useSelector(state => state.getUserReducer)
     console.log(getUserReducer.User);
     useEffect(() => {
@@ -21,15 +20,17 @@ export default function Main() {
 
         })
     }, [])
-    const deletePostBtn = (item,index) => {
+    const deletePostBtn = (item, index) => {
+        let id = item._id
+        console.log(id);
         deletePost(item._id).then(res => {
             console.log("Da xoa");
-            const array = postData.splice(index,1)
-            
-            setPostData(array)
         })
+        let newList = postData
+            newList.splice(index, 1)
+            setPostData([...newList])
     }
-    const logoutBtn = ()=>{
+    const logoutBtn = () => {
         localStorage.clear();
         window.location.reload()
 
@@ -40,12 +41,12 @@ export default function Main() {
         return (
             <p >
                 <Link to={'/post/' + item._id}>
-                <img src={item.author?item.author.avatar?'http://localhost:8797/' + item.author.avatar:null:null}></img>
-                     {item.author?item.author.name:'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
-                     
+                    <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null}></img>
+                    {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
+
                 </Link>
                 {getUserReducer.User.role === 'admin' ?
-                    (<><button onClick={() => { deletePost(item._id) }}>Delete Post</button></>) : null}
+                    (<><button onClick={() => { deletePostBtn(item,index) }}>Delete Post</button></>) : null}
 
             </p>
         )
