@@ -43,3 +43,7 @@ export const getAllPost = ()=>{
 export const deletePost = (id)=>{
     return instantAxios.delete('/post/'+id)
 }
+
+export const deleteUser = (id)=>{
+    return instantAxios.delete('/user/'+id)
+}

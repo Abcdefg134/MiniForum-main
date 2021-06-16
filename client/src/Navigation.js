@@ -16,6 +16,7 @@ import { GET_USER } from './actions/types';
 const UserProfile = lazy(()=> import('./UserProfile'))
 const EditUserProfile = lazy(()=> import('./EditUserProfile'))
 const Post = lazy(()=>import('./Post'))
+const AdminPage = lazy(()=> import('./AdminPage'))
 const keyStorage = 'accessToken'
 
 export default function Navigation() {
@@ -45,6 +46,7 @@ export default function Navigation() {
                     {!token ?
                         <LoginScreen setToken={loginSucess} /> :
                         (<><Suspense fallback={<div>Loading...</div>}>
+                            {crurrentUser.role ==='admin'?(<Route exact path='/admin' component={AdminPage} />):null}
                             <Route exact path="/" component={Main} />
                             <Route exact path="/userprofile" component={UserProfile} />
                             <Route exact path="/post/:id" component={Post} />
