@@ -62,7 +62,7 @@ router.get('/uploads/:name',(req,res)=>{
             message: 'no filename specified'
         })
     }
-    res.sendFile(path.resolve(`../server/upload/${fileName}`))
+    res.sendFile(path.resolve(`../server/uploads/${fileName}`))
 })
 
 module.exports = router

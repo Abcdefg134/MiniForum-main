@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router'
 import { signup } from './axios'
 import logo from './img/Logo.png'
+
 export default function SignupScreen() {
     const history = useHistory()
     const [email, setEmail] = useState('')

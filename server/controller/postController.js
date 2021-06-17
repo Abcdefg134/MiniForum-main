@@ -6,7 +6,8 @@ const Comment = require('../model/Comment')
 const constants = require('../constants')
 const Space = require('../model/Space')
 // New Post
-router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
+
+const newPost = router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
     const authId = req.authenticateUser._id
     let post = new Post({
         
@@ -32,6 +33,7 @@ router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
 
     res.json({"data": post} )
 })}})
+
 
 //Add Comment
 

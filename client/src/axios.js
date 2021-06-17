@@ -47,3 +47,7 @@ export const deletePost = (id)=>{
 export const deleteUser = (id)=>{
     return instantAxios.delete('/user/'+id)
 }
+
+export const newPOst = (body)=>{
+    return instantAxios.post('/post/add-post',body)
+}

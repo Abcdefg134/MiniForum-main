@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link, useLocation } from 'react-router-dom'
-import { deletePost, getAllPost } from './axios'
+import { deletePost, getAllPost, newPOst } from './axios'
+import io from 'socket.io-client'
 
+const socket = io('http://localhost:8797',{ transport : ['websocket'] })
 
 export default function Main() {
     let location = useLocation()
@@ -11,15 +13,38 @@ export default function Main() {
     const profileBtn = () => {
         history.push('/userprofile')
     }
+    const [currentPost, setCurrentPost] =useState([])
     const [postData, setPostData] = useState([])
     const getUserReducer = useSelector(state => state.getUserReducer)
+    const [newPost, setNewPost] = useState()
     console.log(getUserReducer.User);
     useEffect(() => {
-        getAllPost().then(res => {
-            setPostData(res.data)
-
+        socket.on("getPost", data=>{
+            console.log(data);
+            setNewPost({
+                title: data.title,
+                imgVideo: data.imgVideo,
+                described: data.described,
+                like: data.like,
+                comment: data.comment,
+                author: data.author,
+                space: data.space
+            })
         })
     }, [])
+    
+    useEffect(()=>{
+        if(newPost){
+            currentPost.push(newPost)
+            console.log(currentPost);
+        }
+    },[newPost,currentPost])
+    useEffect(()=>{
+        getAllPost().then(res => {
+            setPostData(res.data)
+            console.log('abc');
+        })
+    },[newPost])
     const deletePostBtn = (item, index) => {
         let id = item._id
         console.log(id);
@@ -35,12 +60,35 @@ export default function Main() {
         window.location.reload()
 
     }
+    console.log(socket);
+    const abcBtn = ()=>{
+        let data =   {
+            title :'abc',
+            described:'def',
+            like:[],
+            comment:[],
+            space:'un',
+            author:'60c5b3e867f6c3209c481a52'
+        }
+        newPOst(data).then((res)=>{
+            console.log('hola');
+        })
+        socket.emit('newPost',{
+            title :'abc',
+            described:'def',
+            like:[],
+            comment:[],
+            space:'un',
+            author:'60c5b3e867f6c3209c481a52'
+        })
+    }
+
 
     console.log(postData)
     const renderPost = (item, index) => {
         return (
             <p >
-                <Link to={'/post/' + item._id}>
+                <Link to={'/post/' + item._id}><div>{index+1}</div>
                     <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null}></img>
                     {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
 
@@ -56,6 +104,7 @@ export default function Main() {
             <button onClick={profileBtn}>Hồ sơ</button>
             {postData.map(renderPost)}
             <button onClick={logoutBtn}>Dang xuat</button>
+            <button onClick={abcBtn}>Test</button>
         </div>
     )
 }
