@@ -15,6 +15,7 @@ export default function UserProfile() {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
+    const [hidden, setHidden] = useState(true)
     useEffect(() => {
 
         param.id ? getUserById(param.id).then(res => {
@@ -52,6 +53,7 @@ export default function UserProfile() {
     }
     const showEditPassword = () => {
         setType('password')
+        setHidden(false)
     }
     const editPassword = () => {
 
@@ -65,6 +67,8 @@ export default function UserProfile() {
                 setCurrentPassword('')
                 setNewPassword('')
                 setReNewPassword('')
+                setHidden(true)
+                setType('hidden')
             }).catch((err) => {
                 if (err)
                     alert(err);
@@ -84,8 +88,8 @@ export default function UserProfile() {
     const renderPost = (item, index) => {
         return (
             <div>
-                <Link to ={'/post/'+ item._id}>
-                    {index+1}: {item.title}:{item.comment?.length} : {item.like?.length}
+                <Link to={'/post/' + item._id}>
+                    {index + 1}: {item.title}:{item.comment?.length} : {item.like?.length}
                 </Link>
             </div>
         )
@@ -99,27 +103,28 @@ export default function UserProfile() {
             <div>Age: {currentUser.age}</div>
             <div>
                 <div>Password:*******</div>
-                <button onClick={showEditPassword}>Change Pass</button>
+                {param.id ? null : (<button onClick={showEditPassword}>Change Pass</button>)}
 
             </div>
             <div>
                 <li>Avatar</li>
                 <img src={'http://localhost:8797/' + currentUser.avatar} height="300px" width="300px"></img>
-                <label for='file-upload'>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuZK3D1EibbMjkeDUE2lJ4WTc_2eNrW25B4g&usqp=CAU" height='30px' width='30px' />
-                </label>
-                <input id="file-upload" onChange={handleChangeImg} type='file'></input>
-                <button onClick={editImgBtn}>Edit Img</button>
+                {param.id ? null :
+                   (<> <label for='file-upload'>
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuZK3D1EibbMjkeDUE2lJ4WTc_2eNrW25B4g&usqp=CAU" height='30px' width='30px' />
+                    </label>
+                <input id="file-upload" onChange={handleChangeImg} type='file'></input></>)}
+                {param.id ? null : (<button onClick={editImgBtn}>Edit Img</button>)}
             </div>
-            <div>  <button onClick={editBtn}>Edit</button></div>
+            {param.id ? null : (<div><button onClick={editBtn}>Edit</button></div>)}
             <div>
                 <input type={type} value={currentPassword} onChange={handleChangeCurrentPassword} placeholder="Current Password" ></input>
                 <input type={type} value={newPassword} onChange={handleChangeNewPassword} placeholder="New Password"></input>
                 <input type={type} value={reNewPassword} onChange={handleChangeReNewPassword} placeholder="Re New Password"></input>
-                <button onClick={editPassword} >Submit</button>
+                <button hidden={hidden} onClick={editPassword} >Submit</button>
             </div>
             <div>
-                {currentUser.userPost?currentUser.userPost.map(renderPost):null}
+                {currentUser.userPost ? currentUser.userPost.map(renderPost) : null}
             </div>
         </div>
     )

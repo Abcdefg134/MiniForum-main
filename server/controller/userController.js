@@ -9,6 +9,7 @@ const path = require('path')
 //Get all User
 router.get('/all', (req, res) => {
     let role = req.authenticateUser.role
+    console.log(role);
     if (role === "admin") {
         return User.find().exec((err, users) => {
             if (err) throw err
@@ -52,11 +53,11 @@ router.put('/update', constants.upload.single('avatar'), async (req, res) => {
 })
 //Delete User
 router.delete('/:id', (req, res) => {
-    const id = req.params.id
+    const id = { _id: req.params.id }
     if (!id) {
         res.status(400).send({ messError: 'not found id' })
     }
-    if (req.authenticateUser.role == "admin") {
+    //if (req.authenticateUser.role == "admin") {
         User.findByIdAndDelete(id, function (err, docs) {
             if (err) {
                 console.log(err)
@@ -65,9 +66,9 @@ router.delete('/:id', (req, res) => {
                 res.json({ mess: "Sucessesful delete id:" + req.params.id })
             }
         })
-    } else {
-        res.status(400).send({ messError: 'You must be admin ' })
-    }
+    //} else {
+      //  res.status(400).send({ messError: 'You must be admin ' })
+    //}
 })
 
 //Update avatar

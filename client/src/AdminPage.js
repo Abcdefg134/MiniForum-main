@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getAllUser, deleteUser } from './axios'
 export default function AdminPage() {
 
@@ -14,12 +14,12 @@ export default function AdminPage() {
         }).catch((err) => {
             alert(err)
         })
-    })
+    }, [])
 
-    const deleteUser = (item, index) => {
+    const deleteUserBtn = (item, index) => {
         let id = item._id
         console.log(id);
-        deleteUser(item._id).then(res => {
+        deleteUser(id).then(res => {
             console.log("Da xoa");
         })
         let newList = allUser
@@ -33,30 +33,32 @@ export default function AdminPage() {
     const goToMainPage = () => {
         history.push('/')
     }
-    const goToMyProfile = ()=>{
+    const goToMyProfile = () => {
         history.push('/userprofile')
     }
     const renderUser = (item, index) => {
         return (
-            <div>
+            <p>
                 <Link to={'/userprofile/' + item._id}>
                     <label>{index + 1}</label>
                     <h3>{item.name} </h3>
                     <img src={item.avatar ? 'http://localhost:8797/' + item.avatar : null} height="30px" width="30px"></img>
                     <h3>Post: {item.userPost ? item.userPost.length : 0}</h3>
-                    <button onClick={() => { deleteUser(item, index) }}>Delete</button>
                 </Link>
-            </div>
+                <button onClick={() => { deleteUserBtn(item, index) }}>Delete</button>
+
+            </p>
         )
     }
     return (
         <div>
-            <div>
+            
                 <button onClick={goToMyProfile}>My Profile</button>
                 <button onClick={goToMainPage}>Main Page</button>
                 <button onClick={logoutBtn}>Log Out</button>
-            </div>
-            {allUser.map(renderUser)}
+                {allUser.map(renderUser)}
+            
+            
         </div>
     )
 }

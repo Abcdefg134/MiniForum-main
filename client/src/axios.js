@@ -28,6 +28,10 @@ export const updateUser = (body)=>{
     return instantAxios.put('/user/update',body)
 }
 
+export const deleteUser = (id)=>{
+    return instantAxios.delete('/user/'+id)
+}
+
 export const updateImgUser = (formData)=>{
     return instantAxios.post('/user/avatar', formData)
 }
@@ -44,9 +48,7 @@ export const deletePost = (id)=>{
     return instantAxios.delete('/post/'+id)
 }
 
-export const deleteUser = (id)=>{
-    return instantAxios.delete('/user/'+id)
-}
+
 
 export const newPOst = (body)=>{
     return instantAxios.post('/post/add-post',body)
