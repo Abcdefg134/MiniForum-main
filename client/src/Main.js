@@ -91,7 +91,7 @@ export default function Main() {
         return (
             <p >
                 <Link to={'/post/' + item._id}>{index + 1}
-                    <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null}></img>
+                    <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null} height="30px" width="30px"></img>
                     {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
 
                 </Link>

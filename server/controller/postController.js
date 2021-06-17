@@ -8,7 +8,7 @@ const Space = require('../model/Space');
 const User = require('../model/User');
 // New Post
 
-router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
+router.post('/add-post', constants.upload.single('imgVideo'),async (req, res) => {
     const authId = req.authenticateUser._id
     let post = new Post({
         _id: new mongoose.Types.ObjectId,
@@ -22,7 +22,7 @@ router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
     })
 
     if (authId) {
-        post.save((err) => {
+       await post.save((err) => {
             if (err) throw err;
             console.log('Post save successfully')
             //Space.findOneAndUpdate(post.space,{
@@ -31,10 +31,11 @@ router.post('/add-post', constants.upload.single('imgVideo'), (req, res) => {
             //})} else {
             // res.status(400).send({messError:'You must login '})
             //}
-            User.findByIdAndUpdate(post.author, {
-                $push: { userPost: post._id }
-            })
+            
             res.json({ "data": post })
+        })
+        User.findByIdAndUpdate(post.author._id, {
+            $push: { userPost: post._id }
         })
     }
     else {
