@@ -68,7 +68,7 @@ export default function Main() {
             like: [],
             comment: [],
             space: 'un',
-            author: '60c5b3e867f6c3209c481a52'
+            author: getUserReducer.User._id
         }
         newPOst(data).then((res) => {
             console.log('hola');
@@ -79,7 +79,7 @@ export default function Main() {
             like: [],
             comment: [],
             space: 'un',
-            author: '60c5b3e867f6c3209c481a52'
+            author: getUserReducer.User._id
         })
     }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router';
+import { Link } from 'react-router-dom'
 import { getAvatar, getUserById, updateImgUser, updatePassword } from './axios';
 import axios from 'axios'
 import './imgBtn.css'
@@ -15,12 +16,13 @@ export default function UserProfile() {
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
     useEffect(() => {
-        
-        param.id? getUserById(param.id).then(res => {
+
+        param.id ? getUserById(param.id).then(res => {
             setCurrentUser(res.data)
-        }):getUserById(getUserReducer.User._id).then(res => {
+        }) : getUserById(getUserReducer.User._id).then(res => {
             setCurrentUser(res.data)
-    })}, [])
+        })
+    }, [])
     console.log(currentUser);
     const editBtn = () => {
         history.push('/editUser')
@@ -28,13 +30,13 @@ export default function UserProfile() {
     const handleChangeImg = (event) => {
         setImg(event.target.files[0])
     }
-    const handleChangeCurrentPassword = (event)=>{
+    const handleChangeCurrentPassword = (event) => {
         setCurrentPassword(event.target.value)
     }
-    const handleChangeNewPassword = (event)=>{
+    const handleChangeNewPassword = (event) => {
         setNewPassword(event.target.value)
     }
-    const handleChangeReNewPassword = (event)=>{
+    const handleChangeReNewPassword = (event) => {
         setReNewPassword(event.target.value)
     }
     const editImgBtn = () => {
@@ -51,22 +53,22 @@ export default function UserProfile() {
     const showEditPassword = () => {
         setType('password')
     }
-    const editPassword =()=>{
-        
-        if (newPassword === reNewPassword && newPassword !=='' ){
-            let body ={
+    const editPassword = () => {
+
+        if (newPassword === reNewPassword && newPassword !== '') {
+            let body = {
                 currentPassword,
                 newPassword
             }
-            updatePassword(body).then(res=>{
+            updatePassword(body).then(res => {
                 alert('Doi pass thanh cong')
                 setCurrentPassword('')
                 setNewPassword('')
                 setReNewPassword('')
-            }).catch((err)=>{
-                if(err) 
-                alert(err);
-                
+            }).catch((err) => {
+                if (err)
+                    alert(err);
+
             })
         } else (
             alert('Moi ban nhap lai')
@@ -77,6 +79,16 @@ export default function UserProfile() {
         localStorage.clear();
         window.location.reload()
 
+    }
+
+    const renderPost = (item, index) => {
+        return (
+            <div>
+                <Link to ={'/post/'+ item._id}>
+                    {index+1}: {item.title}:{item.comment?.length} : {item.like?.length}
+                </Link>
+            </div>
+        )
     }
     return (
         <div>
@@ -105,6 +117,9 @@ export default function UserProfile() {
                 <input type={type} value={newPassword} onChange={handleChangeNewPassword} placeholder="New Password"></input>
                 <input type={type} value={reNewPassword} onChange={handleChangeReNewPassword} placeholder="Re New Password"></input>
                 <button onClick={editPassword} >Submit</button>
+            </div>
+            <div>
+                {currentUser.userPost?currentUser.userPost.map(renderPost):null}
             </div>
         </div>
     )

@@ -37,6 +37,7 @@ router.post('/signup', async (req,res)=>{
         password: req.body.password,
         address: req.body.address,
         age: req.body.age,
+        userPost:req.body.userPost,
         avatar: 'uploads/Untitled.png',
         role: req.body.role
     })

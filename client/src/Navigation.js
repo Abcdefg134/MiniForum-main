@@ -6,14 +6,14 @@ import {
 } from "react-router-dom";
 import { Switch } from 'react-router';
 import jwtDecode from 'jwt-decode';
-import Main from './Main'
+//import Main from './Main'
 import LoginScreen from './LoginScreen'
 import SignupScreen from './SignupScreen';
 //import UserProfile from './UserProfile';
 import { useDispatch } from 'react-redux';
 
 import { GET_USER } from './actions/types';
-
+const Main = lazy(()=>import('./Main'))
 const UserProfile = lazy(()=> import('./UserProfile'))
 const EditUserProfile = lazy(()=> import('./EditUserProfile'))
 const Post = lazy(()=>import('./Post'))

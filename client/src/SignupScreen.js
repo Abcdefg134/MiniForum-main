@@ -14,6 +14,7 @@ export default function SignupScreen() {
             password,
             address: "default",
             age: '0',
+            userPost:[],
             name: "User",
             role: "user",
             avatar: 'uploads/Untitled.png',
@@ -45,8 +46,8 @@ export default function SignupScreen() {
     }
     return (
         <div className="section">
-            <div class="box">
-                <div class="img-container">
+            <div className="box">
+                <div className="img-container">
                     <a><img src={logo} alt="TIE-Logo" /></a>
                 </div>
                 <h2>Sign in</h2>
@@ -70,7 +71,7 @@ export default function SignupScreen() {
                 </form>
             </div>
             <div className="animation-area">
-                <ul class="box-area">
+                <ul className="box-area">
                     <li></li>
                     <li></li>
                     <li></li>
