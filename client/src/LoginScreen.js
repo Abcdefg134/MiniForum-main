@@ -31,6 +31,9 @@ export default function LoginScreen({ setToken }) {
     const goToSignUp = ()=>{
         history.push('/signup')
     }
+    const handleSubmit = (event)=>{
+        event.preventDefault()
+    }
 
     return (
 
@@ -40,7 +43,7 @@ export default function LoginScreen({ setToken }) {
                     <img src={logo} alt="TIE-Logo" />
                 </div>
                 <h2>Sign in</h2>
-                <form >
+                <form onClick={handleSubmit} >
                     <div>
                         <input className="input-username" type="email" onChange={handleChangeEmail} value={email}/>
                         <label>Email</label>
@@ -70,10 +73,3 @@ export default function LoginScreen({ setToken }) {
 
     )
 }
-
-
-
-
-
-
-

@@ -39,6 +39,9 @@ export default function SignupScreen() {
     const goToLogin = () => {
         history.push('/')
     }
+    const handleSubmit = (event)=>{
+        event.preventDefault()
+    }
     return (
         <div className="section">
             <div class="box">
@@ -46,7 +49,7 @@ export default function SignupScreen() {
                     <a><img src={logo} alt="TIE-Logo" /></a>
                 </div>
                 <h2>Sign in</h2>
-                <form action="" id="myForm">
+                <form onClick={handleSubmit} id="myForm">
                     <div>
                         <input className="input-username" type="email" onChange={handleChangeEmail} value={email}  />
                         <label>Email</label>
