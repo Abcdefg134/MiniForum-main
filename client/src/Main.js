@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { deletePost, getAllPost, newPOst } from './axios'
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:8797',{ transport : ['websocket'] })
+const socket = io('http://localhost:8797', { transport: ['websocket'] })
 
 export default function Main() {
     let location = useLocation()
@@ -13,13 +13,13 @@ export default function Main() {
     const profileBtn = () => {
         history.push('/userprofile')
     }
-    const [currentPost, setCurrentPost] =useState([])
+    const [currentPost, setCurrentPost] = useState([])
     const [postData, setPostData] = useState([])
     const getUserReducer = useSelector(state => state.getUserReducer)
     const [newPost, setNewPost] = useState()
     console.log(getUserReducer.User);
     useEffect(() => {
-        socket.on("getPost", data=>{
+        socket.on("getPost", data => {
             console.log(data);
             setNewPost({
                 title: data.title,
@@ -32,19 +32,19 @@ export default function Main() {
             })
         })
     }, [])
-    
-    useEffect(()=>{
-        if(newPost){
+
+    useEffect(() => {
+        if (newPost) {
             currentPost.push(newPost)
             console.log(currentPost);
         }
-    },[newPost,currentPost])
-    useEffect(()=>{
+    }, [newPost, currentPost])
+    useEffect(() => {
         getAllPost().then(res => {
             setPostData(res.data)
             console.log('abc');
         })
-    },[newPost])
+    }, [newPost])
     const deletePostBtn = (item, index) => {
         let id = item._id
         console.log(id);
@@ -52,8 +52,8 @@ export default function Main() {
             console.log("Da xoa");
         })
         let newList = postData
-            newList.splice(index, 1)
-            setPostData([...newList])
+        newList.splice(index, 1)
+        setPostData([...newList])
     }
     const logoutBtn = () => {
         localStorage.clear();
@@ -61,50 +61,57 @@ export default function Main() {
 
     }
     console.log(socket);
-    const abcBtn = ()=>{
-        let data =   {
-            title :'abc',
-            described:'def',
-            like:[],
-            comment:[],
-            space:'un',
-            author:'60c5b3e867f6c3209c481a52'
+    const abcBtn = () => {
+        let data = {
+            title: 'abc',
+            described: 'def',
+            like: [],
+            comment: [],
+            space: 'un',
+            author: '60c5b3e867f6c3209c481a52'
         }
-        newPOst(data).then((res)=>{
+        newPOst(data).then((res) => {
             console.log('hola');
         })
-        socket.emit('newPost',{
-            title :'abc',
-            described:'def',
-            like:[],
-            comment:[],
-            space:'un',
-            author:'60c5b3e867f6c3209c481a52'
+        socket.emit('newPost', {
+            title: 'abc',
+            described: 'def',
+            like: [],
+            comment: [],
+            space: 'un',
+            author: '60c5b3e867f6c3209c481a52'
         })
     }
 
-
+    const goToAminPage = () => {
+        history.push('/admin')
+    }
     console.log(postData)
     const renderPost = (item, index) => {
         return (
             <p >
-                <Link to={'/post/' + item._id}><div>{index+1}</div>
+                <Link to={'/post/' + item._id}>{index + 1}
                     <img src={item.author ? item.author.avatar ? 'http://localhost:8797/' + item.author.avatar : null : null}></img>
                     {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
 
                 </Link>
                 {getUserReducer.User.role === 'admin' ?
-                    (<><button onClick={() => { deletePostBtn(item,index) }}>Delete Post</button></>) : null}
+                    (<><button onClick={() => { deletePostBtn(item, index) }}>Delete Post</button></>) : null}
 
             </p>
         )
     }
     return (
         <div>
+            {getUserReducer.User.role === 'admin' ? (
+                <><button onClick={goToAminPage}>forum manager</button>
+                </>) : null}
+            <button onClick={logoutBtn}>Dang xuat</button>
             <button onClick={profileBtn}>Hồ sơ</button>
             {postData.map(renderPost)}
-            <button onClick={logoutBtn}>Dang xuat</button>
+
             <button onClick={abcBtn}>Test</button>
+
         </div>
     )
 }

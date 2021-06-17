@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { getAvatar, getUserById, updateImgUser, updatePassword } from './axios';
 import axios from 'axios'
 import './imgBtn.css'
 export default function UserProfile() {
+    const param = useParams()
     const history = useHistory()
     const [img, setImg] = useState('')
     const getUserReducer = useSelector(state => state.getUserReducer)
@@ -14,11 +15,12 @@ export default function UserProfile() {
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
     useEffect(() => {
-
-        getUserById(getUserReducer.User._id).then(res => {
+        
+        param.id? getUserById(param.id).then(res => {
             setCurrentUser(res.data)
-        })
-    }, [])
+        }):getUserById(getUserReducer.User._id).then(res => {
+            setCurrentUser(res.data)
+    })}, [])
     console.log(currentUser);
     const editBtn = () => {
         history.push('/editUser')
@@ -70,8 +72,15 @@ export default function UserProfile() {
             alert('Moi ban nhap lai')
         )
     }
+
+    const logoutBtn = () => {
+        localStorage.clear();
+        window.location.reload()
+
+    }
     return (
         <div>
+            <div><button onClick={logoutBtn}>Dang xuat</button></div>
             <div>Name: {currentUser.name}</div>
             <div>Email: {currentUser.email}</div>
             <div>Address: {currentUser.address}</div>

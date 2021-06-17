@@ -51,3 +51,9 @@ export const deleteUser = (id)=>{
 export const newPOst = (body)=>{
     return instantAxios.post('/post/add-post',body)
 }
+
+export const getAllUser = (body)=>{
+    return instantAxios.get('/user/all')
+}
+
+

@@ -47,8 +47,19 @@ export default function EditUserProfile() {
             history.push('/userprofile')
         })
     }
+    const logoutBtn = () => {
+        localStorage.clear();
+        window.location.reload()
+
+    }
+    const goToMyProfile = ()=>{
+        history.push('/userprofile')
+    }
     return (
         <div>
+            <div><button onClick={logoutBtn}>Dang xuat</button>
+            <button onClick={goToMyProfile}>My Profile</button>
+            </div>
             <div>
                 <div>
                     <label>Name</label>

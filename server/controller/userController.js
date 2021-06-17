@@ -27,7 +27,7 @@ router.get('/:id', (req, res) => {
         res.status(400).send({ messError: 'not found id' })
     }
 
-    User.findById(id).exec((err, users) => {
+    User.findById(id).populate('userPost').exec((err, users) => {
         if (err) throw err
         res.json(users)
     })
@@ -106,5 +106,22 @@ router.post('/password', async (req, res) => {
         }
 })
 
+// Update Role
+
+router.post('/update-role',(req,res)=>{
+    let authRole = req.authenticateUser.role
+    let body = {
+        _id: req.body._id,
+        role: req.body.role
+    }
+    if(authRole === 'admin'){
+        User.findByIdAndUpdate(body._id.body,{new:true}, function(err,result){
+            if(err) return res.send(err)
+            res.json(result)
+        })
+    } else{
+        return res.status(400).send({messError:'You must be Admin'})
+    }
+})
 
 module.exports = router
