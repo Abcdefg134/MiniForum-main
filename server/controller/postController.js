@@ -32,14 +32,19 @@ router.post('/add-post', constants.upload.single('imgVideo'), async (req, res) =
                     return res.status(422).json({ error: err })
                 } 
             })
+            User.findByIdAndUpdate(post.author, {
+                $push: { userPost: post._id }
+            },{new:true}).exec((err)=>{
+                if(err){
+                    return res.status(422).json({error: err})
+                }
+            })
             //})} else {
             // res.status(400).send({messError:'You must login '})
             //}
         }
         )
-        //User.findByIdAndUpdate(post.author, {
-          //  $push: { userPost: post._id }
-        //})
+       
         res.json({ "data": post })
     }
     else {

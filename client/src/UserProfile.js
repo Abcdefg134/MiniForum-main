@@ -24,7 +24,7 @@ export default function UserProfile() {
             setCurrentUser(res.data)
         })
     }, [])
-    console.log(currentUser);
+    console.log(currentUser.userPost);
     const editBtn = () => {
         history.push('/editUser')
     }

@@ -23,6 +23,8 @@ export default function Main() {
     const [space, setSpace] = useState([])
     const [spaceId, setSpaceId] = useState()
     const [file, setFile] = useState()
+    const [postDele,setPostDele] = useState('alo')
+    //console.log(postDele);
     //console.log(getUserReducer.User);
     useEffect(() => {
         socket.on("getPost", data => {
@@ -37,31 +39,41 @@ export default function Main() {
                 space: data.space
             })
         })
+        
     }, [])
+    useEffect(()=>{
+        socket.on('delete',(id)=>{
+            console.log(id);
+            setPostDele(id)
+        })
+    },[])
     useEffect(() => {
         getSpace().then(res => {
             setSpace(res.data)
         }).catch(err => alert(err))
     }, [])
     //console.log(space);
-    useEffect(() => {
-        if (newPost) {
-            currentPost.push(newPost)
-            console.log(currentPost);
-        }
-    }, [newPost, currentPost])
+    //useEffect(() => {
+      //  if (newPost) {
+        //    currentPost.push(newPost)
+          //  console.log(currentPost);
+       // }
+    //}, [newPost, currentPost])
     useEffect(() => {
         getAllPost().then(res => {
             setPostData(res.data)
-            console.log('abc');
+            console.log(res.data);
         })
-    }, [newPost])
-    const deletePostBtn = (item, index) => {
+    }, [newPost, postDele])
+    const deletePostBtn = async (item, index) => {
         let id = item._id
         console.log(id);
-        deletePost(item._id).then(res => {
+        await deletePost(item._id).then(res => {
             console.log("Da xoa");
+            socket.emit('deletePost',id)
+            
         })
+        socket.emit('deletePost',id)
         let newList = postData
         newList.splice(index, 1)
         setPostData([...newList])
@@ -119,7 +131,7 @@ export default function Main() {
             </p>
         )
     }
-    console.log(spaceId);
+    //console.log(spaceId);
     return (
         <div>
 
