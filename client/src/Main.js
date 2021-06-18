@@ -13,7 +13,7 @@ export default function Main() {
     const profileBtn = () => {
         history.push('/userprofile')
     }
-    const [currentPost, setCurrentPost] = useState([])
+    //const [currentPost, setCurrentPost] = useState([])
     const [postData, setPostData] = useState([])
     const getUserReducer = useSelector(state => state.getUserReducer)
     const [newPost, setNewPost] = useState()
@@ -24,6 +24,7 @@ export default function Main() {
     const [spaceId, setSpaceId] = useState()
     const [file, setFile] = useState()
     const [postDele,setPostDele] = useState('alo')
+    const [term, setTerm] = useState()
     //console.log(postDele);
     //console.log(getUserReducer.User);
     useEffect(() => {
@@ -116,6 +117,17 @@ export default function Main() {
     const handleChangeFile = (event)=>{
         setFile(event.target.files[0])
     }
+    const handleChangeTerm = (event)=>{
+        setTerm(event.target.value)
+    }
+
+    const searchPost = (item)=>{
+        if(term == null){
+            return item
+        } else if(item.title.toLowerCase().includes(term.toLowerCase())|| item.author?.name.toLowerCase().includes(term.toLowerCase())){
+            return item
+        }
+    }
     //console.log(postData)
     const renderPost = (item, index) => {
         return (
@@ -168,8 +180,10 @@ export default function Main() {
                     </div>
                     <button onClick={submitBtn}>Submit</button>
                 </div>
-
-                {postData.map(renderPost)}
+                <div>
+                    <input type='text' onChange={handleChangeTerm} />
+                </div>
+                {postData.filter(searchPost).map(renderPost)}
 
 
 

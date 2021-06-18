@@ -49,7 +49,8 @@ export default function Navigation() {
                         (<><Suspense fallback={<div>Loading...</div>}>
                             {crurrentUser.role ==='admin'?(<Route exact path='/admin' component={AdminPage} />):null}
                             <Route exact path="/" component={Main} />
-                            <Route exact path="/userprofile" component={UserProfile} />
+                            <Suspense fallback={<div>Loading...</div>}>
+                            <Route exact path="/userprofile" component={UserProfile} /></Suspense>
                             <Route exact path='/userprofile/:id' component={UserProfile} />
                             <Route exact path="/post/:id" component={Post} />
                             <Route exact path='/editUSer' component={EditUserProfile} />

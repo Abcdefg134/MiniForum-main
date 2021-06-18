@@ -10,16 +10,16 @@ export default function EditUserProfile() {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [age, setAge] = useState('')
-    const [password, setPassword] = useState('')
-    const [avatar, setAvatar] = useState('')
+    //const [password, setPassword] = useState('')
+    //const [avatar, setAvatar] = useState('')
     useEffect(() => {
         getUserById(getUserReducer.User._id).then(res => {
             setCurrentUser(res.data)
             setName(res.data.name)
             setAddress(res.data.address)
             setAge(res.data.age)
-            setPassword(res.data.password)
-            setAvatar(res.data.avatar)
+          //  setPassword(res.data.password)
+            //setAvatar(res.data.avatar)
         })
     }, [])
     const handleChangeName = (event) => {
@@ -31,9 +31,9 @@ export default function EditUserProfile() {
     const handleChangeAge = (event) => {
         setAge(event.target.value)
     }
-    const handleChangePassword = (event) => {
-        setPassword(event.target.value)
-    }
+    //const handleChangePassword = (event) => {
+      //  setPassword(event.target.value)
+    //}
     const updateBtn = () => {
         let body = {
             _id: currentUser._id,

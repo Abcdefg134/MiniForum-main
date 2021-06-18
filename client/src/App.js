@@ -1,6 +1,6 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
-import LoginScreen from './LoginScreen';
+//import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 function App() {
   return (

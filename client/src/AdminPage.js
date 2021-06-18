@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+//import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { getAllUser, deleteUser } from './axios'
@@ -8,7 +8,7 @@ export default function AdminPage() {
     const history = useHistory()
     const [allUser, setAllUser] = useState([])
     const [term,setTerm] = useState()
-    const getUserReducer = useSelector(state => state.getUserReducer)
+    //const getUserReducer = useSelector(state => state.getUserReducer)
     useEffect(() => {
         getAllUser().then(res => {
             setAllUser(res.data)
@@ -41,16 +41,6 @@ export default function AdminPage() {
         setTerm(event.target.value)
     }
 
-    const serchingFor = (term)=>{
-        return (x)=>{
-            if(!x){
-                return x
-            } else if(x){
-                
-            }
-        }
-    }
-
 
     const searchName = (item)=>{
         if(term == null){
@@ -75,10 +65,10 @@ export default function AdminPage() {
     }
     return (
         <div>
-
+            <div>
                 <button onClick={goToMyProfile}>My Profile</button>
                 <button onClick={goToMainPage}>Main Page</button>
-                <button onClick={logoutBtn}>Log Out</button>
+                <button onClick={logoutBtn}>Log Out</button></div>
                 <input type='text' onChange={handleChangeTerm} />
                 {allUser.filter(searchName).map(renderUser)}
             

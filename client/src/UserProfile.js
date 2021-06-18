@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom'
-import { getAvatar, getUserById, updateImgUser, updatePassword } from './axios';
-import axios from 'axios'
+import { getUserById, updateImgUser, updatePassword } from './axios';
+
 import './imgBtn.css'
 export default function UserProfile() {
     const param = useParams()
