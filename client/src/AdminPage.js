@@ -7,6 +7,7 @@ export default function AdminPage() {
 
     const history = useHistory()
     const [allUser, setAllUser] = useState([])
+    const [term,setTerm] = useState()
     const getUserReducer = useSelector(state => state.getUserReducer)
     useEffect(() => {
         getAllUser().then(res => {
@@ -36,7 +37,29 @@ export default function AdminPage() {
     const goToMyProfile = () => {
         history.push('/userprofile')
     }
-    const renderUser = (item, index) => {
+    const handleChangeTerm = (event)=>{
+        setTerm(event.target.value)
+    }
+
+    const serchingFor = (term)=>{
+        return (x)=>{
+            if(!x){
+                return x
+            } else if(x){
+                
+            }
+        }
+    }
+
+
+    const searchName = (item)=>{
+        if(term == null){
+            return item
+        } else if(item.name.toLowerCase().includes(term.toLowerCase())){
+            return(item)
+        }
+    }
+    const renderUser = (item, index) => {    
         return (
             <p>
                 <Link to={'/userprofile/' + item._id}>
@@ -52,11 +75,12 @@ export default function AdminPage() {
     }
     return (
         <div>
-            
+
                 <button onClick={goToMyProfile}>My Profile</button>
                 <button onClick={goToMainPage}>Main Page</button>
                 <button onClick={logoutBtn}>Log Out</button>
-                {allUser.map(renderUser)}
+                <input type='text' onChange={handleChangeTerm} />
+                {allUser.filter(searchName).map(renderUser)}
             
             
         </div>
