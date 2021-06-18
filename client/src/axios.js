@@ -58,4 +58,8 @@ export const getAllUser = (body)=>{
     return instantAxios.get('/user/all')
 }
 
+export const getSpace = ()=>{
+    return instantAxios.get('/space')
+}
+
 

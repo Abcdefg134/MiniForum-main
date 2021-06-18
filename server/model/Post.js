@@ -12,7 +12,10 @@ var postSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'Comment'
     }],
-    space: String,
+    space: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Space'
+    }],
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

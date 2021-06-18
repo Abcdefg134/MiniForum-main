@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { Link, useLocation } from 'react-router-dom'
-import { deletePost, getAllPost, newPOst } from './axios'
+import { deletePost, getAllPost, getSpace, newPOst } from './axios'
 import io from 'socket.io-client'
 
 const socket = io('http://localhost:8797', { transport: ['websocket'] })
@@ -17,7 +17,13 @@ export default function Main() {
     const [postData, setPostData] = useState([])
     const getUserReducer = useSelector(state => state.getUserReducer)
     const [newPost, setNewPost] = useState()
-    console.log(getUserReducer.User);
+    const [title, setTitle] = useState()
+    const [described, setDescribed] = useState()
+    const [author, setAuthor] = useState()
+    const [space, setSpace] = useState([])
+    const [spaceId, setSpaceId] = useState()
+    const [file, setFile] = useState()
+    //console.log(getUserReducer.User);
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -32,7 +38,12 @@ export default function Main() {
             })
         })
     }, [])
-
+    useEffect(() => {
+        getSpace().then(res => {
+            setSpace(res.data)
+        }).catch(err => alert(err))
+    }, [])
+    //console.log(space);
     useEffect(() => {
         if (newPost) {
             currentPost.push(newPost)
@@ -60,33 +71,40 @@ export default function Main() {
         window.location.reload()
 
     }
-    console.log(socket);
-    const abcBtn = () => {
-        let data = {
-            title: 'abc',
-            described: 'def',
-            like: [],
-            comment: [],
-            space: 'un',
-            author: getUserReducer.User._id
-        }
+    //console.log(socket);
+    const submitBtn = () => {
+        let data =  new FormData()
+        data.append('title',title)
+        if(file){
+        data.append('imgVideo',file,file.name)}
+        data.append('described',described)
+        data.append('like','')
+        data.append('comment','')
+        data.append('space',spaceId)
+        data.append('author',getUserReducer.User._id)
         newPOst(data).then((res) => {
             console.log('hola');
         })
         socket.emit('newPost', {
-            title: 'abc',
-            described: 'def',
-            like: [],
-            comment: [],
-            space: 'un',
-            author: getUserReducer.User._id
+            data
         })
     }
-
+    const handleChangeTitle = (event) => {
+        setTitle(event.target.value)
+    }
+    const handleChangeDescribed = (event) => {
+        setDescribed(event.target.value)
+    }
+    const handleChangeSpaceId = (event) => {
+        setSpaceId(event.target.value)
+    }
     const goToAminPage = () => {
         history.push('/admin')
     }
-    console.log(postData)
+    const handleChangeFile = (event)=>{
+        setFile(event.target.files[0])
+    }
+    //console.log(postData)
     const renderPost = (item, index) => {
         return (
             <p >
@@ -101,17 +119,48 @@ export default function Main() {
             </p>
         )
     }
+    console.log(spaceId);
     return (
         <div>
+
             {getUserReducer.User.role === 'admin' ? (
                 <><button onClick={goToAminPage}>forum manager</button>
                 </>) : null}
             <button onClick={logoutBtn}>Dang xuat</button>
             <button onClick={profileBtn}>Hồ sơ</button>
-            {postData.map(renderPost)}
+            <div>
+                <div>
+                    <label>
+                        Title
+                    </label>
+                    <input value={title} onChange={handleChangeTitle} />
+                </div>
+                <div>
+                    <label>
+                        Described
+                    </label>
+                    <input value={described} onChange={handleChangeDescribed} />
+                </div>
+                <div>
+                    <label>
+                        Space
+                    </label>
+                    <select value={spaceId} onChange={handleChangeSpaceId} >
+                        {space?.map((item, index) => {
+                            return <option key={index} value={item._id}>{item.name}</option>
+                        })}
+                    </select>
+                    <div>
+                        <input type='file' onChange={handleChangeFile} />
+                    </div>
+                    </div>
+                    <button onClick={submitBtn}>Submit</button>
+                </div>
 
-            <button onClick={abcBtn}>Test</button>
+                {postData.map(renderPost)}
 
-        </div>
-    )
+
+
+            </div>
+            )
 }

@@ -42,7 +42,7 @@ export default function UserProfile() {
     }
     const editImgBtn = () => {
         if (!img) {
-            alert('I must input Img')
+            alert('You must input Img')
         } else {
             const formData = new FormData();
             formData.append('avatar', img, img.name)

@@ -11,4 +11,28 @@ router.get('/:id',async (req, res) => {
     res.json(spaces)
 })
 
+
+router.get('/',(req,res)=>{
+    //let authId= req.authenticateUser._id
+    //if(authId){
+        return Space.find().exec((err,spaces)=>{
+            if(err) throw err
+            res.json(spaces)
+            
+        })
+    //}
+})
+
+router.post('/add',(req,res)=>{
+    let space = new Space({
+        name: req.body.name,
+        list_spaces: req.body.list_spaces,
+
+    })
+    space.save((err)=>{
+        if(err) throw err;
+        console.log('space save');
+    })
+    res.json(space)
+})
 module.exports = router;

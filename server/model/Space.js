@@ -2,11 +2,10 @@ var mongoose = require('mongoose')
 
 var spaceSchema = mongoose.Schema({
     name: String,
-    follow: {
+    list_posts: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    list_posts: Array,
+        ref:'Post'
+    }],
     created: {
         type: Date,
         default: Date.now

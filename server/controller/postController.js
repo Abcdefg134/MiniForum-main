@@ -15,27 +15,31 @@ router.post('/add-post', constants.upload.single('imgVideo'), async (req, res) =
         title: req.body.title,
         imgVideo: req.file?.path,
         described: req.body.described,
-        like: req.body.like,
-        comment: req.body.comment,
+        like: [],
+        comment: [],
         space: req.body.space,
         author: req.body.author
     })
-
+    console.log(post._id);
     if (authId) {
         await post.save((err) => {
             if (err) throw err;
             console.log('Post save successfully')
-            //Space.findOneAndUpdate(post.space,{
-            //  $push:{list_posts: idPost}
-            //})
+            Space.findByIdAndUpdate(post.space, {
+                $push: { list_posts: post._id }
+            }, { new: true }).exec((err, result) => {
+                if (err) {
+                    return res.status(422).json({ error: err })
+                } 
+            })
             //})} else {
             // res.status(400).send({messError:'You must login '})
             //}
         }
         )
-        User.findByIdAndUpdate(post.author, {
-            $push: { userPost: post._id }
-        })
+        //User.findByIdAndUpdate(post.author, {
+          //  $push: { userPost: post._id }
+        //})
         res.json({ "data": post })
     }
     else {
@@ -160,16 +164,16 @@ router.delete('/:id', async (req, res) => {
     }
     const id = { _id: req.params.id }
     const currentPost = await Post.findById(id)
-    let authId = req.authenticateUser._id
-    let role = req.authenticateUser.role
-    if (currentPost.author === authId || role === 'admin') {
-        Post.findByIdAndDelete(id, function (err, result) {
-            if (err) return res.send(err)
-            res.json({
-                mess: "Sucessful delete id:" + req.params.id
-            })
+    //let authId = req.authenticateUser._id
+    //let role = req.authenticateUser.role
+    //if (currentPost.author === authId || role === 'admin') {
+    Post.findByIdAndDelete(id, function (err, result) {
+        if (err) return res.send(err)
+        res.json({
+            mess: "Sucessful delete id:" + req.params.id
         })
-    }
+    })
+    //}
 })
 
 

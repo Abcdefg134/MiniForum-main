@@ -39,6 +39,7 @@ io.on(("connection"),function(socket){
 const UserRouter = require('./controller/userController')
 const PostRouter = require('./controller/postController')
 const authRouter = require('./controller/authController')
+const SpaceRouter = require('./controller/spaceController')
 const CommentRounter = require('./controller/commentController')
 const MONGODB_URI = 'mongodb+srv://toan1998:121998vn@cluster0.dwanw.mongodb.net/projectForum?retryWrites=true&w=majority'
 var mongoDB = 'mongodb://localhost:27017/projectForum';
@@ -55,6 +56,7 @@ app.use('/', authRouter)
 app.use('/user', middleware.authenticateJWT, UserRouter)
 app.use('/post', middleware.authenticateJWT, PostRouter)
 app.use('/comment', middleware.authenticateJWT, CommentRounter)
+app.use('/space',middleware.authenticateJWT,SpaceRouter)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 http.listen(PORT, () => { console.log("Server started on http://localhost:" + PORT) })
