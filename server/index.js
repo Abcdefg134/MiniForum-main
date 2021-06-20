@@ -42,6 +42,12 @@ io.on(("connection"), function (socket) {
   socket.on('deletePost', (postID) => {
     io.emit('delete', postID)
   })
+  socket.on('likePost',(_id)=>{
+    io.emit('like',_id)
+  })
+  socket.on('unLike',(_id)=>{
+    io.emit('unLikePost',_id)
+  })
   //})
 })
 

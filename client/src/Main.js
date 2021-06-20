@@ -25,8 +25,8 @@ export default function Main() {
     const [file, setFile] = useState()
     const [postDele,setPostDele] = useState('alo')
     const [term, setTerm] = useState()
-    //console.log(postDele);
-    //console.log(getUserReducer.User);
+    const [liked,setLiked] = useState()
+    const [unLiked, setUnliked] = useState()
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -40,32 +40,34 @@ export default function Main() {
                 space: data.space
             })
         })
-        
-    }, [])
-    useEffect(()=>{
+        socket.on('like',(id)=>{
+            console.log(id);
+            setLiked(id)
+        })
+        socket.on('unLikePost',(id)=>{
+            setUnliked(id)
+        })
         socket.on('delete',(id)=>{
             console.log(id);
             setPostDele(id)
         })
-    },[])
+        
+    }, [])
+    useEffect(()=>{
+        setUnliked('')
+        setLiked('')
+    },[postData])
     useEffect(() => {
         getSpace().then(res => {
             setSpace(res.data)
         }).catch(err => alert(err))
     }, [])
-    //console.log(space);
-    //useEffect(() => {
-      //  if (newPost) {
-        //    currentPost.push(newPost)
-          //  console.log(currentPost);
-       // }
-    //}, [newPost, currentPost])
     useEffect(() => {
         getAllPost().then(res => {
             setPostData(res.data)
             console.log(res.data);
         })
-    }, [newPost, postDele])
+    }, [newPost, postDele,liked,unLiked])
     const deletePostBtn = async (item, index) => {
         let id = item._id
         console.log(id);

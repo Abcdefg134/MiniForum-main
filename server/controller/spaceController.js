@@ -7,7 +7,7 @@ router.get('/:id',async (req, res) => {
         res.status(400).send({messError: "not found id"})
     }
     const id = {_id: req.params.id}
-    const spaces = await (await Space.findById(id)).populated({path: 'author'})
+    const spaces = await Space.findById(id).populated({path: 'author'})
     res.json(spaces)
 })
 

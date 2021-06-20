@@ -86,21 +86,19 @@ router.post('/like/:id', async (req, res,) => {
     let id = { _id: req.params.id }
     const authId = req.authenticateUser._id
     if (authId) {
-        const liked = {
-            _id: authId
+        let body = {
+            _id: req.body._id
         }
-        var nowPost = await Post.findById(id)
-        nowPost.like = nowPost.like || []
-        const addUser = await nowPost.like.push(liked)
-        Post.findByIdAndUpdate(id, nowPost, { new: true }, function (err, result) {
-            if (err) return res.send(err)
+        Post.findByIdAndUpdate(id,{
+            $push:{like: body._id}
+        },{new:true}).exec((err,result)=>{
+            if(err){
+                return res.status(422).json({error: err})
+            } else{
+                res.json(result)
+            }
         })
-    } else {
-        res.status(400).send({ messError: 'You must login ' })
     }
-
-    res.json({ "data": nowPost })
-
 })
 
 //unLike
@@ -125,7 +123,7 @@ router.get('/:id', async (req, res) => {
     if (!id) {
         res.status(400).send({ messErr: 'not found id' })
     } else {
-        const post = await (await Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]))
+        const post = await ( Post.findById(id).populate([{ path: 'author', select: ['name', 'avatar'] }, { path: 'like', select: ['name', 'avatar'] }, { path: 'comment', populate: { path: 'author', select: ['name', 'avatar'] } }]))
         res.json({
             "message": "OK",
             "data": post

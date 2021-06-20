@@ -62,4 +62,15 @@ export const getSpace = ()=>{
     return instantAxios.get('/space')
 }
 
+export const getPostById = (id)=>{
+    return instantAxios.get('/post/'+id)
+}
+
+export const likePost = (id,body)=>{
+    return instantAxios.post('/post/like/'+id,body)
+}
+
+export const unLikePost = (id,body)=>{
+    return instantAxios.post('/post/unlike/'+id,body)
+}
 

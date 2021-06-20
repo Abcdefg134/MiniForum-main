@@ -16,7 +16,7 @@ import { GET_USER } from './actions/types';
 const Main = lazy(()=>import('./Main'))
 const UserProfile = lazy(()=> import('./UserProfile'))
 const EditUserProfile = lazy(()=> import('./EditUserProfile'))
-const Post = lazy(()=>import('./Post'))
+const PostPage = lazy(()=>import('./PostPage'))
 const AdminPage = lazy(()=> import('./AdminPage'))
 const keyStorage = 'accessToken'
 
@@ -52,7 +52,7 @@ export default function Navigation() {
                             <Suspense fallback={<div>Loading...</div>}>
                             <Route exact path="/userprofile" component={UserProfile} /></Suspense>
                             <Route exact path='/userprofile/:id' component={UserProfile} />
-                            <Route exact path="/post/:id" component={Post} />
+                            <Route exact path="/post/:id" component={PostPage} />
                             <Route exact path='/editUSer' component={EditUserProfile} />
                             </Suspense></>)}
                             </Switch>
