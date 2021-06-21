@@ -19,14 +19,16 @@ export default function SignupScreen() {
             role: "user",
             avatar: 'uploads/Untitled.png',
         }
-        if (password === rePassword && password !== "") {
+        if (password !== rePassword) {
+            alert("RePassword does not match")
+        } else if(password.length <6){
+            alert('Mk phai co it nhat 6 ky tu')
+        } else{
             await signup(body).then(res => {
                 history.push('/login')
                 alert("SignUp success")
             }).catch(err => alert(err))
-        } else {
-            alert("RePassword does not match")
-        }
+        } 
     }
 
     const handleChangeEmail = (event) => {
