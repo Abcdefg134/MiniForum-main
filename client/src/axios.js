@@ -74,3 +74,10 @@ export const unLikePost = (id,body)=>{
     return instantAxios.post('/post/unlike/'+id,body)
 }
 
+export const addComment = (id,body)=>{
+    return instantAxios.post('/post/'+id, body)
+}
+
+export const deleteComment = (id,body)=>{
+    return instantAxios.delete('/comment/'+id,body)
+}

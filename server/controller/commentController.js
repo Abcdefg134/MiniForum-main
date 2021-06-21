@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 //const Post = require('../model/Post')
-const Comment = require('../model/Comment')
+const Comment = require('../model/Comment');
+const Post = require('../model/Post');
 //Get comment by Id
 router.get('/get_comment/:id', async (req, res) => {
     if (!req.params.id) {
@@ -68,7 +69,6 @@ router.delete('/:id', (req, res) => {
         res.status(400).send({ messError: 'not found id' })
     }
     const id = { _id: req.params.id }
-
     Comment.findByIdAndDelete(id, function (err, docs) {
         if (err) {
             console.log(err)

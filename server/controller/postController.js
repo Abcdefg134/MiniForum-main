@@ -62,22 +62,22 @@ router.post('/:id', async (req, res) => {
         content: req.body.content,
         author: authId
     })
+    const id = { _id:req.params.id}
     if (authId) {
         comments.save((err) => {
             if (err) throw err;
             console.log('Comment save successfully')
         })
-        let idPost = { _id: req.params.id }
-        let nowPost = await Post.findById(idPost)
-        nowPost.comment = nowPost.comment || []
-        const addUser = await nowPost.comment.push(comments._id)
-        Post.findByIdAndUpdate(idPost, nowPost, { new: true }, function (err, result) {
-            if (err) return res.send(err)
+        Post.findByIdAndUpdate(id,{
+           $push:{comment : comments._id } 
+        },{new:true}).exec((err,result)=>{
+            if(err){
+                return res.status(422).json({error:err})
+            }
         })
-    } else {
+    }else {
         res.status(400).send({ messError: 'You must login ' })
     }
-    res.json({ "data": nowPost })
 })
 
 //Like
@@ -197,6 +197,20 @@ router.delete('/:id', async (req, res) => {
 
         })
     }
+})
+
+router.post('/update/:id',(req,res)=>{
+    let body = {
+        id: req.body._id
+    }
+    let id = { _id:req.params._id}
+    Post.findByIdAndUpdate(id,{
+        $pull:{comment: body._id}
+    },{new:true}).exec((err)=>{
+        if(err){
+            return res.status(422).json({error: err})
+        }
+    })
 })
 
 

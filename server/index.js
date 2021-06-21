@@ -48,6 +48,11 @@ io.on(("connection"), function (socket) {
   socket.on('unLike',(_id)=>{
     io.emit('unLikePost',_id)
   })
+  socket.on('addComment',({content,author})=>{
+    io.emit('addComment',{
+      content,author
+    })
+  })
   //})
 })
 
@@ -70,7 +75,7 @@ var db = mongoose.connection;
 app.use('/', authRouter)
 app.use('/user', middleware.authenticateJWT, UserRouter)
 app.use('/post', middleware.authenticateJWT, PostRouter)
-app.use('/comment', middleware.authenticateJWT, CommentRounter)
+app.use('/comment', CommentRounter)
 app.use('/space', middleware.authenticateJWT, SpaceRouter)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router';
-import { getPostById, getUserById, likePost, unLikePost } from './axios';
+import { addComment, deleteComment, getPostById, getUserById, likePost, unLikePost, updateCommentInPost } from './axios';
 import io from 'socket.io-client'
 
 const socket = io('http://localhost:8797', { transport: ['websocket'] })
@@ -12,36 +12,54 @@ export default function PostPage() {
     //console.log(getUserReducer.User._id);
     const [user, setUser] = useState({})
     const [post, setPost] = useState({})
-    const [idLiked,setIdLiked] = useState()
+    const [idLiked, setIdLiked] = useState()
     const [idUnLiked, setIdUnLiked] = useState()
+    const [comment, setComment] = useState()
+    const [newComment,setNewComment] = useState()
     useEffect(() => {
         getUserById(getUserReducer.User._id).then(res => {
             setUser(res.data)
         })
     }, [])
-    useEffect(()=>{
+    useEffect(() => {
         setIdUnLiked('')
         setIdLiked('')
-    },[post])
-    useEffect(()=>{
-        socket.on('like',(id)=>{
+        setNewComment('')
+        console.log('done');
+    }, [post])
+    useEffect(() => {
+        socket.on('like', (id) => {
             console.log(id);
             setIdLiked(id)
         })
-        socket.on('unLikePost',(id)=>{
+        socket.on('unLikePost', (id) => {
             console.log(id);
             setIdUnLiked(id)
         })
-    },[])
+        socket.on('addComment',data=>{
+            console.log(data);
+            setNewComment(data)
+        })
+    }, [])
     useEffect(() => {
         getPostById(param.id).then(res => {
             setPost(res.data.data)
             console.log(res.data.data);
         })
-    }, [idLiked,idUnLiked])
+    }, [idLiked, idUnLiked,newComment])
     //console.log(post._id);
     //console.log(user.userPost);
-
+    const handleChangeComment = (event)=>{
+        setComment(event.target.value)
+    }
+    const addCommentBtn = ()=>{
+        let body = {
+            content: comment,
+            author: user._id
+        }
+        addComment(param.id,body)
+        socket.emit('addComment',body)
+    }
     const renderPost = (item) => {
         if (!item.imgVideo) {
             return null
@@ -59,30 +77,55 @@ export default function PostPage() {
     const checkLike = post?.like?.filter(item => item._id.includes(user._id)).length
     console.log(checkLike);
     const likeBtn = () => {
-            let body = {
-                _id: user._id
-            }
-            likePost(param.id, body).then(()=>{
-                socket.emit('likePost',body._id)
-            }).catch((err) => { if (err) alert(err) })
-    }
-    const unlikeBtn = ()=>{
-        let body ={
+        let body = {
             _id: user._id
         }
-        unLikePost(param.id, body).then(()=>{
-            socket.emit('unLike',body._id)
+        likePost(param.id, body).then(() => {
+            socket.emit('likePost', body._id)
+        }).catch((err) => { if (err) alert(err) })
+    }
+    const unlikeBtn = () => {
+        let body = {
+            _id: user._id
+        }
+        unLikePost(param.id, body).then(() => {
+            socket.emit('unLike', body._id)
+        }).catch((err) => { if (err) alert(err) })
+    }
+
+    const deleteCommentBtn = (item)=>{
+        deleteComment(item._id).then(()=>{
+            console.log('xoa');
         }).catch((err)=>{if(err) alert(err)})
     }
 
-
+    const renderComment = (item,index)=>{
+        return(
+            <div>
+                <p><img src={'http://localhost:8797/'+item.author?.avatar} height="50px" width="50px"/> {item.author?.name}</p>
+                <p>{item.content} <button onClick={()=>{deleteCommentBtn(item)}}>Delete</button> </p>
+            </div>
+        )
+    }
     return (
         <div>
-            <p> <img src={'http://localhost:8797/' + post?.author?.avatar} height="100px" width="100px" />  {post.author?.name}</p>
-            <p>  {post.title}</p>
-            <p> {post.described}</p>
-            {renderPost(post)}
-            <p>{post?.like?.length} <button onClick={checkLike?unlikeBtn:likeBtn}>{checkLike?'UnLike':'Like'}</button></p>
+            <div>
+                <p> <img src={'http://localhost:8797/' + post?.author?.avatar} height="100px" width="100px" />  {post?.author?.name}</p>
+                <p>  {post?.title}</p>
+                <p> {post?.described}</p>
+                {renderPost(post)}
+                <p>{post?.like?.length} <button onClick={checkLike ? unlikeBtn : likeBtn}>{checkLike ? 'UnLike' : 'Like'}</button></p>
+            </div>
+            <div>
+                <div>
+                    <label>Comment</label>
+                    <input value={comment} onChange={handleChangeComment} />
+                </div>
+                <button onClick={addCommentBtn} >Submit</button>
+            </div>
+            <div>
+                {post?.comment?.map(renderComment)}
+            </div>
         </div>
     )
 }
