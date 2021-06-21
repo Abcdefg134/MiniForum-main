@@ -53,6 +53,9 @@ io.on(("connection"), function (socket) {
       content,author
     })
   })
+  socket.on('delComment',(_id)=>{
+    io.emit('delComment',_id)
+  })
   //})
 })
 

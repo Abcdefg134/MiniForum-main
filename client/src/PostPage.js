@@ -9,13 +9,13 @@ const socket = io('http://localhost:8797', { transport: ['websocket'] })
 export default function PostPage() {
     const param = useParams()
     const getUserReducer = useSelector(state => state.getUserReducer)
-    //console.log(getUserReducer.User._id);
     const [user, setUser] = useState({})
     const [post, setPost] = useState({})
     const [idLiked, setIdLiked] = useState()
     const [idUnLiked, setIdUnLiked] = useState()
     const [comment, setComment] = useState()
     const [newComment,setNewComment] = useState()
+    const [delId, setDelId] = useState()
     useEffect(() => {
         getUserById(getUserReducer.User._id).then(res => {
             setUser(res.data)
@@ -25,6 +25,7 @@ export default function PostPage() {
         setIdUnLiked('')
         setIdLiked('')
         setNewComment('')
+        setDelId('')
         console.log('done');
     }, [post])
     useEffect(() => {
@@ -40,15 +41,16 @@ export default function PostPage() {
             console.log(data);
             setNewComment(data)
         })
+        socket.on('delComment',(id)=>{
+            setDelId(id)
+        })
     }, [])
     useEffect(() => {
         getPostById(param.id).then(res => {
             setPost(res.data.data)
             console.log(res.data.data);
         })
-    }, [idLiked, idUnLiked,newComment])
-    //console.log(post._id);
-    //console.log(user.userPost);
+    }, [idLiked, idUnLiked,newComment,delId])
     const handleChangeComment = (event)=>{
         setComment(event.target.value)
     }
@@ -97,6 +99,7 @@ export default function PostPage() {
         deleteComment(item._id).then(()=>{
             console.log('xoa');
         }).catch((err)=>{if(err) alert(err)})
+        socket.emit('delComment',item._id)
     }
 
     const renderComment = (item,index)=>{

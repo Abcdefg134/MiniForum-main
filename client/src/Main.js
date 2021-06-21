@@ -28,6 +28,7 @@ export default function Main() {
     const [liked,setLiked] = useState()
     const [unLiked, setUnliked] = useState()
     const [newComment,setNewComment] = useState()
+    const [delId, setDelId] = useState()
     useEffect(() => {
         socket.on("getPost", data => {
             console.log(data);
@@ -56,12 +57,15 @@ export default function Main() {
             console.log(data);
             setNewComment(data)
         })
-        
+        socket.on('delComment',(id)=>{
+            setDelId(id)
+        })
     }, [])
     useEffect(()=>{
         setUnliked('')
         setLiked('')
         setNewComment('')
+        setDelId('')
     },[postData])
     useEffect(() => {
         getSpace().then(res => {
@@ -73,7 +77,7 @@ export default function Main() {
             setPostData(res.data)
             console.log(res.data);
         })
-    }, [newPost, postDele,liked,unLiked,newComment])
+    }, [newPost, postDele,liked,unLiked,newComment,delId])
     const deletePostBtn = async (item, index) => {
         let id = item._id
         console.log(id);
