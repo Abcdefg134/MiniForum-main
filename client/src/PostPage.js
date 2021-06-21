@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { addComment, deleteComment, getPostById, getUserById, likePost, unLikePost, updateCommentInPost } from './axios';
 import io from 'socket.io-client'
 
@@ -8,11 +8,13 @@ const socket = io('http://localhost:8797', { transport: ['websocket'] })
 
 export default function PostPage() {
     const param = useParams()
+    let history = useHistory()
     const getUserReducer = useSelector(state => state.getUserReducer)
     const [user, setUser] = useState({})
     const [post, setPost] = useState({})
     const [idLiked, setIdLiked] = useState()
     const [idUnLiked, setIdUnLiked] = useState()
+    const [postDele,setPostDele] = useState('alo')
     const [comment, setComment] = useState()
     const [newComment,setNewComment] = useState()
     const [delId, setDelId] = useState()
@@ -44,7 +46,18 @@ export default function PostPage() {
         socket.on('delComment',(id)=>{
             setDelId(id)
         })
+        socket.on('delete',(id)=>{
+            console.log(id);
+            setPostDele(id)
+        })
     }, [])
+    useEffect(()=>{
+        if(postDele == param.id){
+            history.push('/')
+            alert('Bai viet da bi xoa')
+            console.log('asgfagjksfjga');
+        }
+    },[postDele])
     useEffect(() => {
         getPostById(param.id).then(res => {
             setPost(res.data.data)
