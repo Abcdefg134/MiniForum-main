@@ -103,7 +103,7 @@ export default function PostPage() {
         return(
             <div>
                 <p><img src={'http://localhost:8797/'+item.author?.avatar} height="50px" width="50px"/> {item.author?.name}</p>
-                <p>{item.content} <button onClick={()=>{deleteCommentBtn(item)}}>Delete</button> </p>
+                <p>{item.content}{getUserReducer.User._id == item.author?._id ?(<><button onClick={()=>{deleteCommentBtn(item)}}>Delete</button></>):null }</p>
             </div>
         )
     }

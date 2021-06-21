@@ -143,7 +143,7 @@ export default function Main() {
                     {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
 
                 </Link>
-                {getUserReducer.User.role === 'admin' ?
+                {getUserReducer.User.role === 'admin'||getUserReducer.User._id == item.author?._id ?
                     (<><button onClick={() => { deletePostBtn(item, index) }}>Delete Post</button></>) : null}
 
             </p>
