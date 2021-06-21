@@ -95,7 +95,7 @@ export default function Main() {
 
     }
     //console.log(socket);
-    const submitBtn = () => {
+    const submitBtn = async () => {
         let data =  new FormData()
         data.append('title',title)
         if(file){
@@ -105,14 +105,22 @@ export default function Main() {
         data.append('comment','')
         data.append('space',spaceId)
         data.append('author',getUserReducer.User._id)
-        newPOst(data).then((res) => {
+        if(!title){
+            alert('phai dien title')
+        }else if(!spaceId){
+            alert('phai chon space')
+        }
+        
+        else {
+        await newPOst(data).then((res) => {
             console.log('hola');
         })
-        socket.emit('newPost', {
+         socket.emit('newPost', {
             data
-        })
+        })}
     }
     const handleChangeTitle = (event) => {
+
         setTitle(event.target.value)
     }
     const handleChangeDescribed = (event) => {
@@ -125,7 +133,14 @@ export default function Main() {
         history.push('/admin')
     }
     const handleChangeFile = (event)=>{
-        setFile(event.target.files[0])
+        
+        //const  getSize = 
+        if(event.target.files[0].size>4000000){
+            alert('Max size is 40mb')
+            setFile('')
+        } else{
+            setFile(event.target.files[0])
+        }
     }
     const handleChangeTerm = (event)=>{
         setTerm(event.target.value)
@@ -180,6 +195,7 @@ export default function Main() {
                         Space
                     </label>
                     <select value={spaceId} onChange={handleChangeSpaceId} >
+                        <option disabled selected  >Select space</option>
                         {space?.map((item, index) => {
                             return <option key={index} value={item._id}>{item.name}</option>
                         })}
