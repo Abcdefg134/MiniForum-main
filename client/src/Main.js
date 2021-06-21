@@ -135,7 +135,7 @@ export default function Main() {
     const handleChangeFile = (event)=>{
         
         //const  getSize = 
-        if(event.target.files[0].size>4000000){
+        if(event.target.files[0].size>40000000){
             alert('Max size is 40mb')
             setFile('')
         } else{
