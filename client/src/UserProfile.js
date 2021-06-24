@@ -113,7 +113,7 @@ export default function UserProfile() {
                    (<> <label for='file-upload'>
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuZK3D1EibbMjkeDUE2lJ4WTc_2eNrW25B4g&usqp=CAU" height='30px' width='30px' />
                     </label>
-                <input id="file-upload" onChange={handleChangeImg} type='file'></input></>)}
+                <input id="file-upload" onChange={handleChangeImg} type='file'  accept="image/png, image/gif, image/jpeg"></input></>)}
                 {param.id ? null : (<button onClick={editImgBtn}>Edit Img</button>)}
             </div>
             {param.id ? null : (<div><button onClick={editBtn}>Edit</button></div>)}

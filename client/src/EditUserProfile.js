@@ -60,6 +60,7 @@ export default function EditUserProfile() {
             <div><button onClick={logoutBtn}>Dang xuat</button>
             <button onClick={goToMyProfile}>My Profile</button>
             </div>
+            <div>Không được để trống thông tin</div>
             <div>
                 <div>
                     <label>Name</label>
@@ -70,11 +71,11 @@ export default function EditUserProfile() {
                     <input value={address} onChange={handleChangeAddress}></input>
                 </div>
                 <div>
-                    <label>Name</label>
-                    <input value={age} onChange={handleChangeAge} ></input>
+                    <label>Age</label>
+                    <input value={age} accept='number' type='number' onChange={handleChangeAge} ></input>
                 </div>
                 <div>
-                    <button onClick={updateBtn}>Update</button>
+                    <button disabled={!name||!address||!age} onClick={updateBtn}>Update</button>
                 </div>
             </div>
         </div>

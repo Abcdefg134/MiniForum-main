@@ -64,6 +64,11 @@ export default function PostPage() {
             console.log(res.data.data);
         })
     }, [idLiked, idUnLiked,newComment,delId])
+    const logoutBtn = () => {
+        localStorage.clear();
+        window.location.reload()
+
+    }
     const handleChangeComment = (event)=>{
         setComment(event.target.value)
     }
@@ -72,7 +77,8 @@ export default function PostPage() {
             content: comment,
             author: user._id
         }
-        addComment(param.id,body)
+        addComment(param.id,body).then(setComment(''))
+        
         socket.emit('addComment',body)
     }
     const renderPost = (item) => {
@@ -125,6 +131,7 @@ export default function PostPage() {
     }
     return (
         <div>
+            <button onClick={logoutBtn}>Dang xuat</button>
             <div>
                 <p> <img src={'http://localhost:8797/' + post?.author?.avatar} height="100px" width="100px" />  {post?.author?.name}</p>
                 <p>  {post?.title}</p>
@@ -137,7 +144,7 @@ export default function PostPage() {
                     <label>Comment</label>
                     <input value={comment} onChange={handleChangeComment} />
                 </div>
-                <button onClick={addCommentBtn} >Submit</button>
+                <button disabled={!comment} onClick={addCommentBtn} >Submit</button>
             </div>
             <div>
                 {post?.comment?.map(renderComment)}

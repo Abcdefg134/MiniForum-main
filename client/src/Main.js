@@ -83,7 +83,7 @@ export default function Main() {
         console.log(id);
         await deletePost(item._id).then(res => {
             console.log("Da xoa");
-            socket.emit('deletePost',id)
+           // socket.emit('deletePost',id)
             
         })
         socket.emit('deletePost',id)
