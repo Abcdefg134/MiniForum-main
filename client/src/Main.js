@@ -78,17 +78,7 @@ export default function Main() {
             console.log(res.data);
         })
     }, [newPost, postDele,liked,unLiked,newComment,delId])
-    const deletePostBtn = async (item, index) => {
-        let id = item._id
-        console.log(id);
-        await deletePost(item._id).then(res => {
-            console.log("Da xoa");
-           // socket.emit('deletePost',id)
-            
-        })
-        socket.emit('deletePost',id)
-        
-    }
+    
     const logoutBtn = () => {
         localStorage.clear();
         window.location.reload()
@@ -162,9 +152,6 @@ export default function Main() {
                     {item.author ? item.author.name : 'User đã bị xóa'}:{item.title}:{item.comment?.length} : {item.like?.length}
 
                 </Link>
-                {getUserReducer.User.role === 'admin'||getUserReducer.User._id == item.author?._id ?
-                    (<><button onClick={() => { deletePostBtn(item, index) }}>Delete Post</button></>) : null}
-
             </p>
         )
     }
