@@ -1,8 +1,8 @@
 import React, { useEffect, useState,Suspense, lazy } from 'react'
-import './index.css'
+//import './index.css'
 import {
     BrowserRouter as Router,
-    Route, useHistory, useParams
+    Route
 } from "react-router-dom";
 import { Switch } from 'react-router';
 import jwtDecode from 'jwt-decode';
@@ -11,6 +11,7 @@ import LoginScreen from './LoginScreen'
 import SignupScreen from './SignupScreen';
 //import UserProfile from './UserProfile';
 import { useDispatch } from 'react-redux';
+import HomePage from './HomePage';
 
 import { GET_USER } from './actions/types';
 const Main = lazy(()=>import('./Main'))
@@ -43,6 +44,8 @@ export default function Navigation() {
         <div>
             <Router>
                 <Switch>
+                    
+                    <Route exact path='/homepage' component={HomePage} />
                     <Route exact path="/signup" component={SignupScreen} />
                     {!token ?
                         <LoginScreen  exact setToken={loginSucess} /> :
