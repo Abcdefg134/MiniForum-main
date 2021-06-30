@@ -16,7 +16,7 @@ export default function SignupScreen() {
             age: '0',
             userPost:[],
             name: "User",
-            role: "admin",
+            role: "user",
             avatar: 'uploads/Untitled.png',
         }
         if (password !== rePassword) {
