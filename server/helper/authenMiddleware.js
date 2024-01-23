@@ -7,13 +7,13 @@ const authenticateJWT = (req, res, next) => {
     if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, process.env.SECRET_KEY,async (err, payload) => {
+        jwt.verify(token, process.env.SECRET_KEY, async (err, payload) => {
             if (err) {
                 return res.sendStatus(403);
             }
             console.log(payload)
-          let user = await User.findById(payload._id).exec()
-       
+            let user = await User.findById(payload._id).exec()
+
             req.authenticateUser = user
             next();
         });
